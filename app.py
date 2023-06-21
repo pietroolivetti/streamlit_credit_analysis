@@ -46,15 +46,21 @@ We provide a prediction on whether your loan application would be successful and
 
 # Tem como limitar valores mínimos e máximos?
 # loan_amnt
-amount = st.number_input('How much do you wish to borrow?')
-st.write("The amount you want is ", amount)
+st.markdown('### How much do you wish to borrow?')
+st.write('The amount of money you would like to borrow is weighed against your information, such as salary, credit history and credit score.')
+amount = st.number_input('Enter the amount you wish to borrow: ')
+st.write("The amount you want is ", round(amount, 2))
 
 # annual_inc
-income = st.number_input('What is your approximate annual income?')
-st.write("Your annual income is ", income)
+st.markdown('### What is your approximate annual income?')
+st.write('If your loan request is too high compared to your salary, your chances of being approved are lowered.')
+income = st.number_input('Enter your annual income.')
+st.write("Your annual income is ", int(income))
 
 # tot_cur_bal
-balance = st.number_input('Provide an estimation of how much money you have as assets and at your disposal.')
+st.markdown('### What is your approximate current balance?')
+st.write('Enter the value of any assets you have that can count as collateral, as well as your bank balance.')
+balance = st.number_input("Enter an estimate of your assets: ")
 st.write("Your approximate balance and assets are ", balance)
 
 
@@ -62,28 +68,47 @@ st.write("Your approximate balance and assets are ", balance)
 df = pd.read_csv('treated_df.csv')
 
 # term
+st.markdown("### What is the desired timeframe for your payment?")
 possible_terms = np.sort(df['term'].unique())
 term = st.selectbox('Select the term of your loan:', possible_terms)
-st.write('The term select is ', term)
+st.write('The selected term is ', term)
 
 # grade
+grade_url = 'https://www.myfico.com/fico-credit-score-estimator/estimator'
 possible_grades = np.sort(df['grade'].unique())
+
+st.markdown('### Tell us your credit score: ')
+st.write("If you don't know your FICO score, you can estimate it [here](%s). The credit grades are defined according to these intervals:" % grade_url)
+
+st.write('A - 720 or above')
+st.write('B - between 680 and 719')
+st.write('C - between 630 and 679')
+st.write('D - between 550 and 629')
+st.write('E - between 470 and 549')
+st.write('F - between 400 and 469')
+st.write('G - below 400')
 grade = st.selectbox('Select your credit grade: ', possible_grades)
 st.write('Your credit grade is ', grade)
 
 # emp_length
 possible_emp = np.sort(df['emp_length'].unique())
-emp_length = st.selectbox('What is your employment status: ', possible_emp)
+st.markdown("### How long have you been employed for?")
+st.write("The longer and more stable your job is, the better your chances.")
+emp_length = st.selectbox('Enter your employment status: ', possible_emp)
 st.write('Your employment status is ', emp_length)
 
 # home_onwership
 possible_home = np.sort(df['home_ownership'].unique())
-home_ownership = st.selectbox('What is your home ownership status: ', possible_home)
+st.markdown("### What is your home ownership status?")
+st.write("A house is an asset that can be used as collateral, and is usually given great importance in lending contracts.")
+home_ownership = st.selectbox('Select your home ownership status: ', possible_home)
 st.write("You've selected ", home_ownership)
 
 # purpose
 possible_purpose = np.sort(df['purpose'].unique())
-purpose = st.selectbox('What will this loan be destined for: ', possible_purpose)
+st.markdown("### Finally, tell us what is the purpose of your loan.")
+st.write("The risks linked to certain activities are higher than others. Lenders usually consider that too!")
+purpose = st.selectbox('Select the purpose that best fits your needs: ', possible_purpose)
 st.write("You've selected ", purpose)
 
 # Getting features from user
@@ -99,6 +124,7 @@ dict_to_api = {
 }
 
 # Sending to API
+st.markdown("## Confirm the information you've supplied:")
 st.write(dict_to_api)
 st.write("Confirm your information then press the button below to get your results.")
 
@@ -106,16 +132,26 @@ if st.button('Make My Prediction'):
     print("Processando seus dados")
 
     st.write('Here are your results:')
-    # Call da api
+
     res = predict(**dict_to_api)
-    if res['loan_result'] == 0:
+    if res['loan_prob'] >= 0.75:
         st.markdown(f"""
-                 # You have a high chance of having your loan approved. The probability of approval is {round(res['loan_prob'], 2)*100}%.
-                 ## Your interest rate would be close to {round(res['int_rate'], 2)}
+                 ## You have a high chance of having your loan approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
+                 ### Your interest rate would be close to {int(round(res['int_rate']))}%.
+                 """)
+    elif res['loan_prob'] < 0.75 and res['loan_prob'] >= 0.50:
+        st.markdown(f"""
+                 ## Your loan will probably be approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
+                 ### Your interest rate would be close to {int(round(res['int_rate']))}%.
+                 """)
+    elif res['loan_prob'] < 0.50 and res['loan_prob'] >= 0.25:
+        st.markdown(f"""
+                 ## You have a low chance of getting your loan approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
+                 ### Your interest rate would be close to {int(round(res['int_rate']))}%.
                  """)
     else: st.markdown(f"""
-                 # You have a low chance of having your loan approved. The probability of approval is {round(res['loan_prob'], 2)*100}%.
-                 ## Your interest rate would be close to {round(res['int_rate'], 2)}%
+                 ## It is not likely that your loan application will be approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
+                 ### Your interest rate would be close to {int(round(res['int_rate']))}%.
                  """)
 
 else:
