@@ -40,8 +40,8 @@ We provide a prediction on whether your loan application would be successful and
 # loan_amnt
 st.markdown('### How much do you wish to borrow?')
 st.write('The amount of money you would like to borrow is weighed against your information, such as salary, credit history and credit score.')
-amount = st.number_input('Enter the amount you wish to borrow: ')
-#amount = float(st.text_input('Enter the amount you wish to borrow: '))
+#amount = st.number_input('Enter the amount you wish to borrow: ')
+amount = float(st.text_input('Enter the amount you wish to borrow: '))
 
 st.write("The amount you want is ", round(amount, 2))
 
