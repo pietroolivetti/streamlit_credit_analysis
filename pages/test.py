@@ -5,9 +5,9 @@ import joblib
 
 st.sidebar.title('Your Data:')
 
-linear_model = joblib.load('../models/linear_model.joblib')
-class_preproc = joblib.load('../models/logit_preproc.joblib')
-class_model = joblib.load('../models/logit_xgboost_model.joblib')
+linear_model = joblib.load('models/linear_model.joblib')
+class_preproc = joblib.load('models/logit_preproc.joblib')
+class_model = joblib.load('models/logit_xgboost_model.joblib')
 
 mock = 'Select an option'
 
