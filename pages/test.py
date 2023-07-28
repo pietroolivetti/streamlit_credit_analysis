@@ -5,9 +5,12 @@ import joblib
 
 st.sidebar.title('Check Your Data:')
 
-linear_model = joblib.load('../models/linear_model.joblib')
-class_preproc = joblib.load('../models/logit_preproc.joblib')
-class_model = joblib.load('../models/logit_xgboost_model.joblib')
+linear_model = joblib.load('models/linear_model.joblib')
+class_preproc = joblib.load('models/logit_preproc.joblib')
+class_model = joblib.load('models/logit_xgboost_model.joblib')
+
+# Categorical variables
+df = pd.read_csv('treated_df.csv')
 
 
 def predict(loan_amnt, annual_inc, tot_cur_bal, term, grade, emp_length, home_ownership, purpose):
@@ -73,8 +76,7 @@ with tab1:
             st.subheader(f':white_check_mark: Balance: {balance}')
 
 
-    # Categorical variables
-    df = pd.read_csv('../treated_df.csv')
+
 
     # term
     st.markdown("### What is the desired timeframe for your payment?")
