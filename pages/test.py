@@ -191,13 +191,14 @@ if st.button('Make My Prediction', key='main_sd_pred_button') or button_pred:
         with st.sidebar:
             st.warning(f'Probability of Approval: {int(round(res["loan_prob"],2)*100)}%')
             st.warning(f'Interest Rate {int(round(res["int_rate"]))}%')
-    else: st.markdown(f"""
+    else: 
+        st.markdown(f"""
                 ## It is not likely that your loan application will be approved. The probability of approval is {int(round(res["loan_prob"],2)*100)}%.
                 ### Your interest rate would be close to {int(round(res["int_rate"]))}%.
                 """)
-        #with st.sidebar:
-            #st.warning(f'Probability of Approval: {int(round(res["loan_prob"],2)*100)}%')
-            #st.warning(f'Interest Rate {int(round(res["int_rate"]))}%')
+        with st.sidebar:
+            st.warning(f'Probability of Approval: {int(round(res["loan_prob"],2)*100)}%')
+            st.warning(f'Interest Rate {int(round(res["int_rate"]))}%')
         
         
 
