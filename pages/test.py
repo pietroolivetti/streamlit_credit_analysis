@@ -157,47 +157,47 @@ with tab1:
     st.write(dict_to_api)
     st.write("Confirm your information then press the button below to get your results.")
 
-if st.button('Make My Prediction'):
-    with tab2:
-        print("Processando seus dados")
+with st.sidebar:
+    button_pred = st.button('Make My Prediction', key='sd_pred_button')
+if st.button('Make My Prediction', key='main_sd_pred_button') or button_pred:
 
-        st.write('Here are your results:')
+    print("Processando seus dados")
 
-        res = predict(**dict_to_api)
-        if res['loan_prob'] >= 0.75:
-            st.markdown(f"""
-                    ## You have a high chance of having your loan approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
-                    ### Your interest rate would be close to {int(round(res['int_rate']))}%.
-                    """)
-        elif res['loan_prob'] < 0.75 and res['loan_prob'] >= 0.50:
-            st.markdown(f"""
-                    ## Your loan will probably be approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
-                    ### Your interest rate would be close to {int(round(res['int_rate']))}%.
-                    """)
-        elif res['loan_prob'] < 0.50 and res['loan_prob'] >= 0.25:
-            st.markdown(f"""
-                    ## You have a low chance of getting your loan approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
-                    ### Your interest rate would be close to {int(round(res['int_rate']))}%.
-                    """)
-        else: st.markdown(f"""
-                    ## It is not likely that your loan application will be approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
-                    ### Your interest rate would be close to {int(round(res['int_rate']))}%.
-                    """)
+    st.write('Here are your results:')
 
-    # else:
-    #     st.write('Waiting further information.')
-        
-
-
-    # Using object notation
-
-
-    # Using "with" notation
-
-        
-        
-
-
+    res = predict(**dict_to_api)
+    if res['loan_prob'] >= 0.75:
+        st.markdown(f"""
+                ## You have a high chance of having your loan approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
+                ### Your interest rate would be close to {int(round(res['int_rate']))}%.
+                """)
+        with st.sidebar:
+            st.success(f'Probability of Approval: {int(round(res['loan_prob'],2)*100)}%')
+            st.success(f'Interest Rate {int(round(res['int_rate']))}%')
+            
+    elif res['loan_prob'] < 0.75 and res['loan_prob'] >= 0.50:
+        st.markdown(f"""
+                ## Your loan will probably be approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
+                ### Your interest rate would be close to {int(round(res['int_rate']))}%.
+                """)
+        with st.sidebar:
+            st.success(f'Probability of Approval: {int(round(res['loan_prob'],2)*100)}%')
+            st.success(f'Interest Rate {int(round(res['int_rate']))}%')
+    elif res['loan_prob'] < 0.50 and res['loan_prob'] >= 0.25:
+        st.markdown(f"""
+                ## You have a low chance of getting your loan approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
+                ### Your interest rate would be close to {int(round(res['int_rate']))}%.
+                """)
+        with st.sidebar:
+            st.warning(f'Probability of Approval: {int(round(res['loan_prob'],2)*100)}%')
+            st.warning(f'Interest Rate {int(round(res['int_rate']))}%')
+    else: st.markdown(f"""
+                ## It is not likely that your loan application will be approved. The probability of approval is {int(round(res['loan_prob'],2)*100)}%.
+                ### Your interest rate would be close to {int(round(res['int_rate']))}%.
+                """)
+        with st.sidebar:
+            st.warning(f'Probability of Approval: {int(round(res['loan_prob'],2)*100)}%')
+            st.warning(f'Interest Rate {int(round(res['int_rate']))}%')
         
         
 
