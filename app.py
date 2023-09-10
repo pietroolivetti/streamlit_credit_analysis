@@ -123,10 +123,6 @@ dict_to_api = {
     'purpose': purpose
 }
 
-# Sending to API
-st.markdown("## Confirm the information you've supplied:")
-st.write(dict_to_api)
-st.write("Confirm your information then press the button below to get your results.")
 
 if st.button('Make My Prediction'):
     print("Processando seus dados")
