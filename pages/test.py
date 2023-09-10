@@ -152,10 +152,7 @@ dict_to_api = {
     'purpose': purpose
 }
 
-# # Sending to API
-# st.markdown("## Confirm the information you've supplied:")
-# st.write(dict_to_api)
-# st.write("Confirm your information then press the button below to get your results.")
+
 
 with st.sidebar:
     button_pred = st.button('Make My Prediction', key='sd_pred_button')
